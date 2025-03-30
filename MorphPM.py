@@ -13,7 +13,6 @@
 from telethon.tl.types import Message
 from .. import loader, utils
 import logging
-from telethon.tl.functions.channels import JoinChannelRequest
 
 logger = logging.getLogger(__name__)
 
@@ -21,23 +20,6 @@ logger = logging.getLogger(__name__)
 class MorphPM(loader.Module):
     """Модуль для отправки личных сообщений"""
     strings = {"name": "MorphPM"}
-
-    async def client_ready(self, client, db) -> None:
-        if hasattr(self, "hikka"):
-            return
-
-        self.db = db
-        self.client = client
-        try:
-            channel = await self.client.get_entity("t.me/morphmods")
-            await client(JoinChannelRequest(channel))
-        except Exception:
-            logger.error("Can't join morphmods")
-        try:
-            post = (await client.get_messages("@morphmods", ids=[17]))[0]
-            await post.react("❤️")
-        except Exception:
-            logger.error("Can't react to t.me/morphmods")
 
     @loader.command(
         ru_doc="Команда отправки личных сообщений",
